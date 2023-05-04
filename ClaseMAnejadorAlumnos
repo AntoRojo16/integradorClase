@@ -1,0 +1,39 @@
+import numpy as np
+import csv
+from ClaseAlumno import Alumno
+class ManejadorAlumno:
+    __cantidad=0
+    __dimension=0
+
+    def __init__(self,dimension=1):
+        self.__alumnos=np.empty(dimension,dtype=Alumno)
+        self.__dimension=dimension
+        self.__cantidad=0
+
+    def agregarAlumno(self,unAlumno):
+        self.__alumnos[self.__cantidad]=unAlumno
+        self.__cantidad+=1
+        self.__dimension+=1
+        self.__alumnos.resize(self.__dimension)
+
+    def inicalizar(self):
+        archivo=open("alumnos.csv")
+        reader=csv.reader(archivo,delimiter=";")
+        bandera=True
+        for fila in reader:
+            if bandera:
+                bandera=not bandera
+            else:
+                dni=fila[0]
+                apellido=fila[1]
+                nombre=fila[2]
+                carrera=fila[3]
+                año=fila[4]
+                unAlumno=Alumno(dni,apellido,nombre,carrera,año)
+                self.agregarAlumno(unAlumno)
+        archivo.close()
+
+    def mostrar(self):
+        for i in range(self.__cantidad):
+            self.__alumnos[i].mostrar()
+
